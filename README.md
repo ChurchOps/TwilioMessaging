@@ -32,3 +32,7 @@ to run the demo server
 ```bash
 python app.py
 ```
+
+
+## TODOS
+ZeroAuth Integration
