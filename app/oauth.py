@@ -1,76 +1,5 @@
-# /usr/bin/env python
-# Download the twilio-python library from twilio.com/docs/libraries/python
-import os
-import json
-from six.moves.urllib.request import urlopen
+
 from functools import wraps
-
-from flask import Flask, request, render_template, flash, jsonify, _request_ctx_stack
-from flask_cors import cross_origin
-from jose import jwt
-from twilio.twiml.messaging_response import MessagingResponse
-from forms import MessageForm
-from send_sms import send_message
-from dotenv import load_dotenv
-
-app = Flask(__name__)
-load_dotenv(verbose=True)
-app.secret_key = os.getenv('SECRET')
-
-
-@app.route('/', methods=['GET', 'POST'])
-def home():
-    """
-    home page for managing sms messages
-    """
-    form = MessageForm()
-    if form.validate_on_submit():
-        send_message(form.message)
-        flash('Message Sent!')
-
-    return render_template('index.html',
-                           form=form)
-
-# This doesn't need authentication
-@app.route("/api/public")
-@cross_origin(headers=["Content-Type", "Authorization"])
-def public():
-    response = "Hello from a public endpoint! You don't need to be authenticated to see this."
-    return jsonify(message=response)
-
-# This needs authentication
-@app.route("/api/private")
-@cross_origin(headers=["Content-Type", "Authorization"])
-@requires_auth
-def private():
-    response = "Hello from a private endpoint! You need to be authenticated to see this."
-    return jsonify(message=response)
-
-# This needs authorization
-@app.route("/api/private-scoped")
-@cross_origin(headers=["Content-Type", "Authorization"])
-@requires_auth
-def private_scoped():
-    if requires_scope("read:messages"):
-        response = "Hello from a private endpoint! You need to be authenticated and have a scope of read:messages to see this."
-        return jsonify(message=response)
-    raise AuthError({
-        "code": "Unauthorized",
-        "description": "You don't have access to this resource"
-    }, 403)
-
-
-@app.route("/sms", methods=['GET', 'POST'])
-def sms_ahoy_reply():
-    """Respond to incoming messages with a friendly SMS."""
-    # Start our response
-    resp = MessagingResponse()
-
-    # Add a message
-    resp.message("Ahoy! Thanks so much for your message.")
-
-    return str(resp)
-
 
 # Error handler
 class AuthError(Exception):
@@ -78,11 +7,6 @@ class AuthError(Exception):
         self.error = error
         self.status_code = status_code
 
-@app.errorhandler(AuthError)
-def handle_auth_error(ex):
-    response = jsonify(ex.error)
-    response.status_code = ex.status_code
-    return response
 
 # Format error response and append status code
 def get_token_auth_header():
@@ -174,6 +98,3 @@ def requires_scope(required_scope):
                 if token_scope == required_scope:
                     return True
     return False
-
-if __name__ == "__main__":
-    app.run(debug=True)
