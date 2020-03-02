@@ -1,26 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Home</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</head>
-<body>
-
+{% extends "base.html" %}
+{% block content %}
 <div class="container">
+  <div class="row">
   <h2>Message form</h2>
   <form method="POST", action="/">
     <div class="form-group">
-       {{ form.csrf_token }}
-       {{ form.message.label }}
-       {{ form.message(class="form-control") }}
+       {{ MessageForm.csrf_token }}
+       {{ MessageForm.message.label }}
+       {{ MessageForm.message(class="form-control") }}
     </div>
     <button type="submit" class="btn btn-default">Submit</button>
   </form>
+  </div>
 </div>
-
-</body>
-</html>
+{% endblock %}

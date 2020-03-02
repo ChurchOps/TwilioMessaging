@@ -1,0 +1,31 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+        {{ dropzone.load_css() }}
+        <div class="container">
+            <div class="row">
+                <h2>Create a Contact</h2>
+                <form method="POST", action="/">
+                    <div class="form-group">
+                        {{ ContactForm.csrf_token }}
+                        {{ ContactForm.first_name.label }}
+                        {{ ContactForm.first_name(class="form-control") }}
+                        {{ ContactForm.last_name.label }}
+                        {{ ContactForm.last_name(class="form-control") }}
+                        {{ ContactForm.cell_phone.label }}
+                        {{ ContactForm.cell_phone(class="form-control") }}
+                        {{ ContactForm.email.label }}
+                        {{ ContactForm.email(class="form-control") }}
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+            </div>
+            <div class="row">
+                <h2>Bulk Upload </h2>
+          {{ dropzone.create(action="upload_contacts") }}
+                {{ dropzone.style('border: 2px dashed #0087F7; margin: 10%; min-height: 400px;') }}
+            </div>
+            {{ dropzone.load_js() }}
+        </div>
+{% endblock %}

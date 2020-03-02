@@ -6,14 +6,11 @@ from flask import Flask, request, render_template, flash, jsonify, _request_ctx_
 from flask_cors import cross_origin
 from jose import jwt
 from twilio.twiml.messaging_response import MessagingResponse
-from app.forms import MessageForm
+from app import app
+from app.forms import MessageForm, ContactForm
 from app.send_sms import send_message
+from app.etl import Uploader
 from app.oauth import AuthError, get_token_auth_header, requires_auth, requires_scope 
-from dotenv import load_dotenv
-
-app = Flask(__name__)
-load_dotenv(verbose=True)
-app.secret_key = os.getenv('SECRET')
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -21,13 +18,30 @@ def home():
     """
     home page for managing sms messages
     """
-    form = MessageForm()
-    if form.validate_on_submit():
-        send_message(form.message)
+    message_form = MessageForm()
+    if message_form.validate_on_submit():
+        send_message(message_form.message)
         flash('Message Sent!')
 
     return render_template('index.html',
-                           form=form)
+                           MessageForm=message_form)
+
+@app.route('/upload', methods=['GET', 'POST'])
+def upload_contacts():
+    """
+    upload contacts and tags page
+    """
+    contact_form = ContactForm()
+    if contact_form.validate_on_submit():
+        contact = [{"first_name":contact_form.first_name,"last_name":contact_form.last_name,
+                    "Email":contact_form.Email, "Phone":contact_form.Phone}]
+        u = Uploader(contact)
+        u.upload_contacts()
+        flash(f"created contact: {contact}")
+        redirect
+    return render_template('upload.html', ContactForm=contact_form)
+
+
 
 @app.route("/sms", methods=['GET', 'POST'])
 def sms_ahoy_reply():

@@ -4,8 +4,7 @@ from wtforms import StringField
 class MessageForm(FlaskForm):
     message = StringField('Message')
 
-
-class RegistrationForm(FlaskForm):
+class ContactForm(FlaskForm):
     first_name = StringField('First Name')
     last_name = StringField('Last Name')
     cell_phone = StringField('Cell Phone')
