@@ -6,7 +6,7 @@
         <div class="container">
             <div class="row">
                 <h2>Create a Contact</h2>
-                <form method="POST", action="/">
+                <form method="POST", action="/upload">
                     <div class="form-group">
                         {{ ContactForm.csrf_token }}
                         {{ ContactForm.first_name.label }}
@@ -20,6 +20,17 @@
                     </div>
                     <button type="submit" class="btn btn-default">Submit</button>
                 </form>
+            </div>
+            <div class="row">
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul class=flashes>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                    {% endif %}
+                    {% endwith %}
             </div>
             <div class="row">
                 <h2>Bulk Upload </h2>

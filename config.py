@@ -6,4 +6,4 @@ class Config(object):
         'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     DROPZONE_ALLOWED_FILE_TYPE = '.csv'
-    DEBUG = os.environ.get('DEBUG')
+    ENV = 'development'

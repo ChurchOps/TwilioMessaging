@@ -24,8 +24,8 @@ class Uploader:
                 c = Contact(FirstName=row['first_name'],
                             LastName=row['last_name'],
                             Email=row['email'],
-                            Phone=row['cell_phone'])
+                            Phone=row['phone'])
                 db.session.add(c)
-                db.session.commit(c)
+                db.session.commit()
 
 

@@ -33,12 +33,11 @@ def upload_contacts():
     """
     contact_form = ContactForm()
     if contact_form.validate_on_submit():
-        contact = [{"first_name":contact_form.first_name,"last_name":contact_form.last_name,
-                    "Email":contact_form.Email, "Phone":contact_form.Phone}]
+        contact = [{"first_name":contact_form.first_name.data,"last_name":contact_form.last_name.data,
+                    "email":contact_form.email.data, "phone":contact_form.cell_phone.data}]
         u = Uploader(contact)
         u.upload_contacts()
         flash(f"created contact: {contact}")
-        redirect
     return render_template('upload.html', ContactForm=contact_form)
 
 
@@ -88,6 +87,3 @@ def private_scoped():
         "code": "Unauthorized",
         "description": "You don't have access to this resource"
     }, 403)
-
-if __name__ == "__main__":
-    app.run(debug=True)
