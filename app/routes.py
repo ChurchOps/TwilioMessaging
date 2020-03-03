@@ -7,7 +7,8 @@ from flask_cors import cross_origin
 from jose import jwt
 from twilio.twiml.messaging_response import MessagingResponse
 from app import app
-from app.forms import MessageForm, ContactForm
+from app.forms import MessageForm, ContactForm, TagForm
+from app.models import Contact, ContactTag, Tag
 from app.send_sms import send_message
 from app.etl import Uploader
 from app.oauth import AuthError, get_token_auth_header, requires_auth, requires_scope 
@@ -87,3 +88,30 @@ def private_scoped():
         "code": "Unauthorized",
         "description": "You don't have access to this resource"
     }, 403)
+
+
+@app.route("/create/contact", methods=['GET', 'POST'])
+def create_contact():
+    """
+    Handles Creating New Contacts
+    """
+    form = ContactForm()
+    if form.validate_on_submit():
+        contact = Contact(FirstName=form.first_name,
+                          Lastname=form.last_name,
+                          Email=form.email,
+                          Phone=form.phone)
+        db.session.add(contact)
+        db.session.commit()
+        flash('Created Contact: {contact.__repr__()}')
+
+    return render_template('contact.html',
+                           form=form)
+
+
+
+    return render_template('contact.html',
+                           form=form)
+
+if __name__ == "__main__":
+    app.run(debug=True)
