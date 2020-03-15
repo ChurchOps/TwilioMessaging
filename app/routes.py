@@ -7,11 +7,11 @@ from flask_cors import cross_origin
 from jose import jwt
 from twilio.twiml.messaging_response import MessagingResponse
 from app import app
-from app.forms import MessageForm, ContactForm, TagForm
+from app.forms import MessageForm, ContactForm, TagForm, FileForm, secure_filename
 from app.models import Contact, ContactTag, Tag
 from app.send_sms import send_message
 from app.etl import Uploader
-from app.oauth import AuthError, get_token_auth_header, requires_auth, requires_scope 
+from app.oauth import AuthError, get_token_auth_header, requires_auth, requires_scope
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -27,20 +27,29 @@ def home():
     return render_template('index.html',
                            MessageForm=message_form)
 
+
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_contacts():
     """
     upload contacts and tags page
     """
     contact_form = ContactForm()
-    if contact_form.validate_on_submit():
-        contact = [{"first_name":contact_form.first_name.data,"last_name":contact_form.last_name.data,
-                    "email":contact_form.email.data, "phone":contact_form.cell_phone.data}]
+    file_form = FileForm()
+    if file_form.validate_on_submit():
+        f = file_form.file.data
+        filename = secure_filename(f.filename)
+        f.save(os.path.join(
+            app.instance_path, 'UploadFiles', filename
+        ))
+        flash('File Uploaded')
+
+    elif contact_form.validate_on_submit():
+        contact = [{"first_name": contact_form.first_name.data, "last_name": contact_form.last_name.data,
+                    "email": contact_form.email.data, "phone": contact_form.cell_phone.data}]
         u = Uploader(contact)
         u.upload_contacts()
         flash(f"created contact: {contact}")
-    return render_template('upload.html', ContactForm=contact_form)
-
+    return render_template('upload.html', ContactForm=contact_form, FileForm=file_form)
 
 
 @app.route("/sms", methods=['GET', 'POST'])
@@ -53,6 +62,7 @@ def sms_ahoy_reply():
     resp.message("Ahoy! Thanks so much for your message.")
 
     return str(resp)
+
 
 @app.errorhandler(AuthError)
 def handle_auth_error(ex):
@@ -68,6 +78,7 @@ def public():
     response = "Hello from a public endpoint! You don't need to be authenticated to see this."
     return jsonify(message=response)
 
+
 # This needs authentication
 @app.route("/api/private")
 @cross_origin(headers=["Content-Type", "Authorization"])
@@ -75,6 +86,7 @@ def public():
 def private():
     response = "Hello from a private endpoint! You need to be authenticated to see this."
     return jsonify(message=response)
+
 
 # This needs authorization
 @app.route("/api/private-scoped")
@@ -108,10 +120,6 @@ def create_contact():
     return render_template('contact.html',
                            form=form)
 
-
-
-    return render_template('contact.html',
-                           form=form)
 
 if __name__ == "__main__":
     app.run(debug=True)

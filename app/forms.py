@@ -1,5 +1,10 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField
+from flask_wtf.file import FileField, FileRequired
+from werkzeug.utils import secure_filename
+
+class FileForm(FlaskForm):
+    file = FileField(validators=[FileRequired()])
 
 class MessageForm(FlaskForm):
     message = StringField('Message')
@@ -13,3 +18,4 @@ class ContactForm(FlaskForm):
 class TagForm(FlaskForm):
     Tag_name = StringField('Tag')
     Default = BooleanField('Default Tag')
+
