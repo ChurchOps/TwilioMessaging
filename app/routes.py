@@ -51,6 +51,14 @@ def upload_contacts():
         flash(f"created contact: {contact}")
     return render_template('upload.html', ContactForm=contact_form, FileForm=file_form)
 
+@app.route('/manage', methods=['GET'])
+def manage():
+    '''
+    page for managing contacts
+    '''
+    contacts = Contact.query.all()
+
+    return render_template('manage.html', contacts=contacts)
 
 @app.route("/sms", methods=['GET', 'POST'])
 def sms_ahoy_reply():
