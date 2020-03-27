@@ -6,14 +6,6 @@
         width: 100%;
         align-items: stretch;
     }
-    #sidebar {
-        min-width: 250px;
-        max-width: 250px;
-    }
-
-    #sidebar.active {
-        margin-left: -250px;
-    }
 
 </style>
 
@@ -32,30 +24,25 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.14.0/css/mdb.min.css" rel="stylesheet">
     </head>
 
-    <div class="wrapper">
-        <nav id="sidebar" class="m-5">
-            <li class="active" style="list-style: none;">
-                <button type="button" href="#homeSubmenu" data-toggle="collapse"
-                        aria-expanded="false" class="dropdown-toggle btn btn-dark">Menu
-                </button>
-                <ul class="collapse list-unstyled" id="homeSubmenu">
-                    <li>
-                        <a href="/">Send Messages</a>
-                    </li>
-                    <li>
-                        <a href="/upload">Upload Contacts</a>
-                    </li>
-                    <li>
-                        <a href="/manage">Manage Contacts</a>
-                    </li>
-                </ul>
-            </li>
-        </nav>
 
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <a class="navbar-brand" href="/">Twilio Messaging App</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+              <a class="nav-item nav-link active" href="/">Home <span class="sr-only">(current)</span></a>
+              <a class="nav-item nav-link" href="/upload">Add More Recipients</a>
+              <a class="nav-item nav-link" href="#">Manage Recipients</a>
+              <a class="nav-item nav-link disabled" href="#">Manage Group</a>
+            </div>
+          </div>
+        </nav>
+    <div class="container">
         <div class="mt=5">
              {% block content %} {% endblock %}
         </div>
-
     </div>
 <!-- JQuery -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
