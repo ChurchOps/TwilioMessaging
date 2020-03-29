@@ -38,10 +38,13 @@ def upload_contacts():
     if file_form.validate_on_submit():
         f = file_form.file.data
         filename = secure_filename(f.filename)
-        f.save(os.path.join(
-            app.instance_path, 'UploadFiles', filename
-        ))
+        filepath = os.path.join(
+            app.instance_path, filename
+        )
+        f.save(filepath)
         flash('File Uploaded')
+        u = Uploader(filepath)
+        u.upload_contacts()
 
     elif contact_form.validate_on_submit():
         contact = [{"first_name": contact_form.first_name.data, "last_name": contact_form.last_name.data,
