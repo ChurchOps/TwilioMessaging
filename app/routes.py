@@ -63,6 +63,15 @@ def manage():
 
     return render_template('manage.html', contacts=contacts)
 
+@app.route('/delete/{ContactId}', methods=['POST'])
+def delete(ContactId):
+    contact = db.session.query(Contact).filter(Contact.ContactId == ContactId).first()
+    flash(f"Deleted: {contact.FirstName} {contact.LastName}")
+    db.session.delete(contact)
+    db.session.commit()
+
+    return redirect('/manage')
+
 @app.route("/sms", methods=['GET', 'POST'])
 def sms_ahoy_reply():
     """Respond to incoming messages with a friendly SMS."""
