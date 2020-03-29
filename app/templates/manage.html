@@ -20,8 +20,8 @@
       <td>{{ entry.LastName }}</td>
       <td>{{ entry.Phone }}</td>
       <td>{{ entry.Email }}</td>
-        <td><a>edit</a></td>
-        <td><a>delete</a></td>
+        <td><a href="/edit/{{ entry.ContactId }}"</a>edit</td>
+        <td><a href="/delete/{{ entry.ContactId }}">delete</a></td>
     </tr>
   {% endfor %}
   </tbody>

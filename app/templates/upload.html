@@ -4,6 +4,17 @@
 {% block content %}
 
         <div class="container mt-5">
+             <div class="row">
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul class=flashes>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                    {% endif %}
+                    {% endwith %}
+            </div>
             <div class="row">
                 <div class="col-md-6">
                      <h2>Create a Contact</h2>
@@ -35,17 +46,7 @@
                 </div>
 
             </div>
-            <div class="row">
-                {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                <ul class=flashes>
-                    {% for message in messages %}
-                    <li>{{ message }}</li>
-                    {% endfor %}
-                    </ul>
-                    {% endif %}
-                    {% endwith %}
-            </div>
+
 <!--            <div class="row">-->
 <!--                <h2>Bulk Upload </h2>-->
 <!--                {{ dropzone.create(action="/upload") }}-->

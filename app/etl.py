@@ -1,6 +1,7 @@
 from pathlib import Path
 from app import db
 import csv
+import xlrd
 from app.models import Contact
 
 class Uploader:
@@ -45,5 +46,21 @@ class Uploader:
                                     Phone=row['Phone'])
                         db.session.add(c)
                         db.session.commit()
+        if self.upload_type == 'xlsx':
+            wb = xlrd.open_workbook(contacts)
+            sheet = wb.sheet_by_index(0)
+            first_names = [x.value for x in sheet.col(0)][1:]
+            last_names = [x.value for x in sheet.col(1)][1:]
+            emails = [x.value for x in sheet.col(2)][1:]
+            phones = [x.value for x in sheet.col(2)][1:]
+            for first, last, email, phone in zip(first_names, last_names, emails, phones):
+                c = Contact(FirstName=first,
+                            LastName=last,
+                            Email=email,
+                            Phone=phone)
+                db.session.add(c)
+                db.session.commit()
+
+
 
 
