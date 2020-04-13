@@ -6,7 +6,7 @@ from flask import Flask, request, render_template, flash, jsonify, _request_ctx_
 from flask_cors import cross_origin
 from jose import jwt
 from twilio.twiml.messaging_response import MessagingResponse
-from app import app
+from app import app, db
 from app.forms import MessageForm, ContactForm, TagForm, FileForm, secure_filename
 from app.models import Contact, ContactTag, Tag
 from app.send_sms import send_message
@@ -52,7 +52,19 @@ def upload_contacts():
         u = Uploader(contact)
         u.upload_contacts()
         flash(f"created contact: {contact}")
+
     return render_template('upload.html', ContactForm=contact_form, FileForm=file_form)
+
+@app.route('/tags', methods=['GET', 'POST'])
+def tags():
+    tag_form = TagForm()
+    if tag_form.validate_on_submit():
+        tag_name = tag_form.tag_name.data
+        tag = Tag(TagName=tag_name)
+        db.session.add(tag)
+        db.session.commit()
+        flash(f"Created Tag: {tag_form.tag}")
+    return render_template('tags.html', TagForm=tag_form)
 
 @app.route('/manage', methods=['GET'])
 def manage():

@@ -17,6 +17,6 @@ class ContactForm(FlaskForm):
     email = StringField('Email')
 
 class TagForm(FlaskForm):
-    Tag_name = StringField('Tag')
+    tag_name = StringField('Tag')
     Default = BooleanField('Default Tag')
 
