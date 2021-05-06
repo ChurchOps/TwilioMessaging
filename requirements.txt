@@ -9,7 +9,7 @@ clikit==0.4.1
 ecdsa==0.15
 Faker==0.8.18
 Flask==1.1.1
-Flask-Cors==3.0.8
+Flask-Cors==3.0.9
 Flask-Migrate==2.5.2
 flask-orator==0.2.0
 Flask-SQLAlchemy==2.4.1
